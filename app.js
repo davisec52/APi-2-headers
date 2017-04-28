@@ -29,7 +29,7 @@ http.createServer(function(req, res) {
 		res.write(JSON.stringify(resBody));
 		res.end();
 		});
-}).listen(8080, function(){
+}).listen(process.env.PORT, process.env.IP, function(){
 	console.log("getheader server connected");
 });
 
