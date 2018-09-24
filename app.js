@@ -1,38 +1,34 @@
-var http = require("http");
+let http = require("http");
 
 http.createServer(function(req, res) {
-	var userAgent = req.headers['user-agent'];
-	var userArr = userAgent.split(" ");
-	var user = userArr.splice(1, 3).join(" ").replace(/;|\(|\)/g, "");
-	var ip = req.headers["x-forwarded-for"];
-	var lang = req.headers["accept-language"];
-	
-	req.on("error", function(error){
-		console.log(error);
-	}).on("data", function(){
-	    // Do stuff with data, here
-	}).on("end", function(){
-        
+    let request = req;
+    console.log("REQUEST: ", req);
+    let allHeaders = req.headers;
+    console.log(allHeaders);
+	let userAgent = req.headers['user-agent'];
+	let userArr = userAgent.split(" ");
+	let user = userArr.splice(1, 3).join(" ").replace(/;|\(|\)/g, "");
+	let ip = req.headers["x-forwarded-for"];
+	let lang = req.headers["accept-language"];
+		
 		res.statusCode = 200;
-		res.setHeader('Content-Type', 'application/json');
-	        // Alternate header declaration:
-	        // response.writeHead(200, {'Content-Type': 'application/json'})
+	    res.writeHead(200, {'Content-Type': 'application/json', "user-agent": ""})
 
 		var resBody = {
 		  userAgent: user,
 		  ip: ip,
 		  language: lang
 		};
-		
-		console.log(JSON.stringify(resBody));
 		    
 		res.write(JSON.stringify(resBody));
 		res.end();
-		});
+		
 }).listen(process.env.PORT, process.env.IP, function(){
 	console.log("getheader server connected");
 });
 
+
+//Note to self:
 // I wanted a solution using Node js without Express. Found invaluable help from the following resourse:
 // https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/
 
